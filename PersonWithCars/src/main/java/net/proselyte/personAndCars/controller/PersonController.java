@@ -3,6 +3,7 @@ package net.proselyte.personAndCars.controller;
 import java.util.List;
 import net.proselyte.personAndCars.exception.PersonAlreadyExistException;
 import net.proselyte.personAndCars.exception.PersonFromTheFutureException;
+import net.proselyte.personAndCars.exception.PersonNotFoundException;
 import net.proselyte.personAndCars.model.Person;
 import net.proselyte.personAndCars.servise.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,48 +25,43 @@ public class PersonController {
   private PersonService personService;
 
   @RequestMapping(value = "{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-  public ResponseEntity<Person> getPerson(@PathVariable("id") Long personId) {
-    if (personId == null) {
-      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+  public ResponseEntity getPerson(@PathVariable("id") Long personId) {
+    try {
+      return new ResponseEntity<>(personService.getById(personId), HttpStatus.OK);
+    } catch (PersonNotFoundException e) {
+      return ResponseEntity.badRequest().body(e.getMessage());
     }
-    Person person = this.personService.getById(personId);
-    if (person == null) {
-      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-    return new ResponseEntity<>(person,HttpStatus.OK);
   }
 
+
   @RequestMapping(value = "", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-  public ResponseEntity<Person> savePerson(@RequestBody Person person)
-      throws PersonAlreadyExistException, PersonFromTheFutureException {
-     if (person == null) {
-      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+  public ResponseEntity savePerson(@RequestBody Person person) {
+    try {
+      personService.save(person);
+      return new ResponseEntity<>(HttpStatus.OK);
+    } catch (PersonAlreadyExistException | PersonFromTheFutureException e) {
+      return ResponseEntity.badRequest().body(e.getMessage());
     }
-    this.personService.save(person);
-    return new ResponseEntity<>(HttpStatus.CREATED);
   }
 
   @RequestMapping(value = "", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-  public ResponseEntity<Person> updatePerson(@RequestBody Person person)
-      throws PersonAlreadyExistException, PersonFromTheFutureException {
-    HttpHeaders headers = new HttpHeaders();
-
-    if (person == null) {
-      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+  public ResponseEntity updatePerson(@RequestBody Person person) {
+    try {
+      personService.save(person);
+      return new ResponseEntity<>(HttpStatus.OK);
+    } catch (PersonAlreadyExistException | PersonFromTheFutureException e) {
+      return ResponseEntity.badRequest().body(e.getMessage());
     }
-    this.personService.save(person);
-    return new ResponseEntity<>(HttpStatus.OK);
   }
 
   @RequestMapping(value = "{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-  public ResponseEntity<Person> deletePerson(@PathVariable("id") Long personId) {
-    Person person = this.personService.getById(personId);
-
-    if (person == null) {
-      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+  public ResponseEntity deletePerson(@PathVariable("id") Long personId) {
+    try {
+      personService.delete(personId);
+      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    } catch (PersonNotFoundException e) {
+      return ResponseEntity.badRequest().body(e.getMessage());
     }
-    this.personService.delete(personId);
-    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 
   @RequestMapping(value = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

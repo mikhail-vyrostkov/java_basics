@@ -1,15 +1,12 @@
 package net.proselyte.personAndCars.model;
 
-import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,22 +15,28 @@ import lombok.ToString;
 
 @Data
 @Entity
-@Table(name = "persons")
+@Table(name = "cars")
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class Person {
+public class Car {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id_person")
-  private long personId;
-  @Column(name = "name")
-  private String name;
-  @Column(name = "birthdate")
-  private LocalDate birthdate;
+  @Column(name = "id_car")
+  private long carId;
 
+  @Column(name = "vendor")
+  private String vendor;
 
-  @OneToMany(cascade = CascadeType.ALL, mappedBy = "person")
-  private List<Car> cars;
+  @Column(name = "model")
+  private String model;
+
+  @Column(name = "horsepower")
+  private Integer horsepower;
+
+  @ManyToOne
+  @JoinColumn(name = "owner_id")
+  private Person person;
+
 }
