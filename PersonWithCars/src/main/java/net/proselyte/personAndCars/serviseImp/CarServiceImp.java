@@ -1,4 +1,4 @@
-package net.proselyte.personAndCars.servise;
+package net.proselyte.personAndCars.serviseImp;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -10,6 +10,7 @@ import net.proselyte.personAndCars.model.Car;
 import net.proselyte.personAndCars.model.Person;
 import net.proselyte.personAndCars.repository.CarRepository;
 import net.proselyte.personAndCars.repository.PersonRepository;
+import net.proselyte.personAndCars.servise.CarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,15 +27,15 @@ public class CarServiceImp implements CarService {
 
 
   @Override
-  public Car save(Car car, Long personId)
+  public Car save(Car car)
       throws ZeroHorsepowerException, UnderagePersonException, PersonNotFoundException {
     LocalDate today = LocalDate.now();
 
-    Person person = personRepository.findById(personId).get();
+    Person person = personRepository.findById(car.getOwnerId()).get();
     if (person == null) {
       throw new PersonNotFoundException("Person not found!");
     }
-    car.setPerson(person);
+  //  car.setPerson(person);
     log.info("IN CarServiceImp save {}", car);
     if (car.getHorsepower() <= 0) {
       throw new ZeroHorsepowerException("This car has zero horsepower!");
@@ -43,7 +44,6 @@ public class CarServiceImp implements CarService {
       throw new UnderagePersonException("Oops!Person is underage!");
     }
     return carRepository.save(car);
-
   }
 
 }

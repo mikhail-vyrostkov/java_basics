@@ -8,6 +8,6 @@ import net.proselyte.personAndCars.model.Car;
 
 public interface CarService {
 
-  Car save(Car car, Long personId)
+  Car save(Car car)
       throws ZeroHorsepowerException, UnderagePersonException, PersonNotFoundException;
 }
