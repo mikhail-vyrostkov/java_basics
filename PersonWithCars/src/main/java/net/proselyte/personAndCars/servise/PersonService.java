@@ -17,4 +17,6 @@ public interface PersonService {
 
   void delete(Long id) throws PersonNotFoundException;
 
+  void   deleteAll();
+
 }

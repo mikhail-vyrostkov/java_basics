@@ -56,6 +56,12 @@ public class PersonServiceImp implements PersonService {
   }
 
   @Override
+  public void deleteAll(){
+    personRepository.deleteAll();
+  }
+
+
+  @Override
   public List<Person> getAll() {
     log.info("IN PersonServiceImp getAll");
     Iterable<Person> personIterable = personRepository.findAll();
