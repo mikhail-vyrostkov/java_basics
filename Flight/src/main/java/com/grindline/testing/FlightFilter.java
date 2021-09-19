@@ -4,12 +4,12 @@ import java.util.List;
 
 public interface FlightFilter {
 
-  void getAllFlight(List<Flight> flights);
+  List<Flight> getAllFlight(List<Flight> flights);
 
-  void getFlightsWithoutDepartureTimeBeforePresentMoment(List<Flight> flights);
+  List<Flight> getFlightsWithoutDepartureTimeBeforePresentMoment(List<Flight> flights);
 
-  void getFlightsWithoutArrivalDateEarlierDepartureDate(List<Flight> flights);
+  List<Flight> getFlightsWithoutArrivalDateEarlierDepartureDate(List<Flight> flights);
 
-  void getFlightsWithoutGroundTimeMoreThanTwoHours(List<Flight> flights);
+  List<Flight> getFlightsWithoutGroundTimeMoreThanTwoHours(List<Flight> flights);
 
 }
